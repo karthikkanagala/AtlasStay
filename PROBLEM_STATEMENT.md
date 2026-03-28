@@ -2,53 +2,51 @@
 
 ## Context
 
-Hotel discovery flows are often fragmented across search pages, map pages, and booking pages. Users lose time switching contexts and struggle to evaluate trade-offs between price, location, and quality.
+Hotel booking journeys are often split across multiple screens and tools. Users spend extra time switching between search, comparison, map, and booking contexts.
 
 ## Core Problem
 
-Travelers need one coherent interface where they can:
-- Search quickly
-- Compare options confidently
-- Book with transparent pricing
-- Revisit bookings later
+Users need one clear interface where they can search, compare, validate location, and book without losing context.
 
-without relying on multiple tools.
+## Pain Points
 
-## User Pain Points
+1. Too many choices without guided comparison.
+2. Incomplete price clarity before confirmation.
+3. Weak location confidence without map support.
+4. Poor post-booking visibility and control.
+5. Inconsistent experiences across devices.
 
-1. Decision friction from large hotel lists without guided comparison.
-2. Weak visibility into total trip cost before booking.
-3. Limited location confidence without map context.
-4. Poor post-booking visibility for status and cancellation.
-5. Inconsistent experience across desktop and mobile.
+## Solution Direction
 
-## Product Response
+AtlasStay solves these gaps with:
 
-AtlasStay addresses those gaps through:
-
-- Hero-first entry with search and quick city chips.
-- Category tabs and advanced hotel filters.
-- Compare view for side-by-side decision making.
-- Booking form with real-time summary.
-- Map page with hotel markers and fly-to behavior.
-- Booking history persistence and cancellation actions.
-- Analytics page for city/rating trends.
+- Hero-first entry with search and city chips.
+- Category tabs and hotel filters.
+- Side-by-side comparison view.
+- Booking flow with live total calculation.
+- Map exploration and fly-to interaction.
+- Booking history with cancellation actions.
+- Analytics dashboard for quick insights.
 
 ## Scope
 
-- Frontend only.
-- Static JSON data source.
-- Browser localStorage persistence.
-
-## Success Criteria
-
-- Lower time-to-first-valid-booking.
-- Higher usage of compare and map features.
-- Reliable booking save/read flow in localStorage.
-- Stable responsive behavior on common screen sizes.
+- Frontend-only application.
+- Static JSON source data.
+- localStorage-based persistence.
 
 ## Risks
 
-- No real-time inventory/pricing.
-- Device-specific data persistence.
-- External CDN dependency for Leaflet and Chart.js.
+- No real-time inventory/pricing synchronization.
+- Data remains local to one device/browser.
+- CDN outages may affect map/chart features.
+
+## Success Criteria
+
+- Lower time to complete a valid booking.
+- Better compare/map usage.
+- Reliable booking save/read operations.
+- Stable responsive and slideshow behavior.
+
+## Documentation Update
+
+- Mar 29, 2026: Goa Beach Resort image asset was refreshed for better visual quality.

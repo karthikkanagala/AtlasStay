@@ -1,105 +1,100 @@
-# AtlasStay Product Requirements Document
+# AtlasStay Product Requirements Document (PRD)
 
-## 1. Product Summary
+## 1. Product Overview
 
-AtlasStay is a client-side hotel booking experience focused on fast discovery, confident selection, and frictionless booking.
+AtlasStay is a responsive client-side hotel booking experience designed to reduce search friction and increase booking confidence.
 
-The product unifies search, listing filters, comparison, booking, map exploration, booking history, and visual analytics in one responsive interface.
+## 2. Goals
 
-## 2. Objectives
-
-- Reduce search-to-booking effort for users.
-- Improve hotel decision confidence using compare and map context.
-- Keep post-booking data visible through local history.
-- Maintain smooth UI interactions on desktop and mobile.
+- Help users discover hotels quickly.
+- Support better decisions with compare and map context.
+- Provide transparent booking calculations.
+- Maintain smooth behavior across desktop and mobile.
 
 ## 3. Target Users
 
-1. Budget Travelers: optimize for price and value.
-2. Business Travelers: prioritize city location and speed.
-3. Leisure Families: prioritize amenities, ratings, and trust.
+1. Budget travelers: price-focused discovery.
+2. Business travelers: fast city-based booking.
+3. Family/leisure travelers: amenities and trust-focused selection.
 
-## 4. Core Features (Current Build)
+## 4. Functional Requirements
 
 ### 4.1 Home / Hero
 
-- Background slideshow with auto-rotation.
-- Manual controls: previous/next, dots, keyboard arrows, touch swipe.
+- Slideshow with auto-rotation every 5 seconds.
+- Manual controls: previous, next, dots, keyboard, touch swipe.
 - Destination search and city chips.
-- Category tabs dispatch filters to hotels section.
+- Category tabs dispatch hotel filter events.
 
 ### 4.2 Hotels
 
-- Grid rendering from `data/hotels.json`.
-- Search by city/hotel name.
-- Price range filtering.
-- Star filtering and sorting.
-- Category filters via custom events.
+- Render grid from `data/hotels.json`.
+- Filter by search, price, star, category.
+- Sort by price, rating, or name.
+- Empty-state handling when no matches are found.
 
 ### 4.3 Compare
 
 - Compare up to 3 hotels.
-- Side-by-side table for price, stars, rating, amenities.
+- Side-by-side table with value/rating highlights.
 
 ### 4.4 Booking
 
-- Hotel selection binding.
-- Date and guest validation.
-- Live summary calculations.
-- Booking persistence in localStorage.
+- Select hotel and dates.
+- Validate check-in/check-out and guest limits.
+- Live summary (base, GST, total).
+- Save booking in localStorage.
 
 ### 4.5 Map
 
-- Leaflet markers for hotels.
+- Leaflet map with custom price markers.
 - Theme-aware tiles.
-- Fly-to interaction from selected hotel.
+- Fly-to selected hotel.
 
 ### 4.6 History
 
-- Read bookings from localStorage.
-- Status/cancel actions.
-- Summary metrics.
+- List bookings from localStorage.
+- Show booking statistics.
+- Cancel confirmed bookings.
 
 ### 4.7 Analytics
 
-- Charts for city and rating insights.
-- Theme-aware chart refresh behavior.
+- City popularity chart.
+- Star distribution chart.
+- Price trend chart.
+- Re-render on theme and booking updates.
 
 ## 5. Event Contracts
 
 - `category:filter`
+- `hotels:filterCity`
 - `hotel:selected`
 - `hotel:selected:byId`
+- `navigate:booking`
 - `compare:updated`
 - `booking:saved`
-- `navigate:booking`
 - `themeChanged`
-- `hotels:filterCity`
 
 ## 6. Non-Functional Requirements
 
-- Frontend only (no backend dependency).
-- Responsive layout for mobile/tablet/desktop.
-- ES module architecture with clear separation by page/component.
-- Accessible labels and interaction feedback via toast/modal.
+- Frontend only, no backend dependency.
+- Responsive UI for mobile/tablet/desktop.
+- Modular ES module architecture.
+- Clear visual feedback (toast/modal).
 
-## 7. KPIs
+## 7. Constraints
 
-- Search-to-booking completion rate.
-- Compare feature usage rate.
-- Booking save success rate.
-- Map interaction rate.
-- Returning session activity (same browser/device).
+- Static JSON dataset only.
+- Device-local persistence only.
+- External CDN dependency for Leaflet and Chart.js.
 
-## 8. Constraints
+## 8. Success Indicators
 
-- Static JSON data; no real-time inventory.
-- Local device persistence only.
-- Third-party CDN availability required for map/charts.
+- Faster search-to-booking flow.
+- More compare/map engagement.
+- Reliable booking persistence.
+- Stable slideshow auto-rotation behavior.
 
-## 9. Future Enhancements
+## 9. Documentation Update
 
-- Backend APIs for inventory and pricing.
-- Authenticated user accounts.
-- Cloud synced booking history.
-- Payment integrations.
+- Mar 29, 2026: Goa Beach Resort image asset was refreshed for better visual quality.
