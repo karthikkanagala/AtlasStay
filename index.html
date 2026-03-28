@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AtlasStay - Smart Hotel Booking</title>
+
+  <script type="module" src="components/themeBoot.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <link rel="stylesheet" href="styles/global.css" />
+  <link rel="stylesheet" href="styles/navbar.css" />
+  <link rel="stylesheet" href="styles/sections.css" />
+  <link rel="stylesheet" href="styles/cards.css" />
+</head>
+<body>
+  <nav id="main-navbar">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#home">AtlasStay ✦</a>
+      <div class="nav-links" id="nav-links">
+        <a class="nav-link active" data-section="home" href="#home">Home</a>
+        <a class="nav-link" data-section="hotels" href="#hotels">Hotels</a>
+        <a class="nav-link" data-section="compare" href="#compare">Compare</a>
+        <a class="nav-link" data-section="booking" href="#booking">Booking</a>
+        <a class="nav-link" data-section="map" href="#map">Map</a>
+        <a class="nav-link" data-section="history" href="#history">History</a>
+        <a class="nav-link" data-section="analytics" href="#analytics">Analytics</a>
+      </div>
+      <div class="nav-right">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <span id="theme-icon">🌙</span>
+        </button>
+        <a class="btn-book-now" href="#booking">Book Now</a>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="nav-category-tabs secondary-nav" id="secondary-nav">
+      <div class="tabs-inner secondary-nav-inner">
+        <button class="cat-tab active" data-category="all">🏨 All Stays</button>
+        <button class="cat-tab" data-category="luxury">💎 Luxury</button>
+        <button class="cat-tab" data-category="business">💼 Business</button>
+        <button class="cat-tab" data-category="beachside">🏖️ Beachside</button>
+        <button class="cat-tab" data-category="heritage">🏰 Heritage</button>
+      </div>
+    </div>
+  </nav>
+
+  <section id="home" class="hero-section">
+    <div class="hero-slideshow" id="hero-slideshow"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content-wrapper">
+      <div class="hero-badge">✦ Smart Hotel Booking</div>
+
+      <h1 class="hero-title">
+        Millions of smiles,<br />
+        <span class="hero-title-accent">one perfect stay.</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        From budget to luxury — find and book hotels across India instantly.
+      </p>
+
+      <div class="hero-search-bar">
+        <div class="search-field">
+          <label>DESTINATION</label>
+          <input type="text" id="hero-destination" placeholder="Where are you going?" />
+        </div>
+        <div class="search-divider"></div>
+        <div class="search-field">
+          <label>CHECK-IN</label>
+          <input type="date" id="hero-checkin" />
+        </div>
+        <div class="search-divider"></div>
+        <div class="search-field">
+          <label>CHECK-OUT</label>
+          <input type="date" id="hero-checkout" />
+        </div>
+        <div class="search-divider"></div>
+        <div class="search-field">
+          <label>GUESTS</label>
+          <input type="number" id="hero-guests" value="2" min="1" max="20" />
+        </div>
+        <button class="hero-search-btn" id="hero-search-btn">Search Hotels</button>
+      </div>
+
+      <div class="hero-cities">
+        <span class="hero-cities-label">Popular:</span>
+        <button class="city-chip" data-city="Mumbai">Mumbai</button>
+        <button class="city-chip" data-city="Goa">Goa</button>
+        <button class="city-chip" data-city="Jaipur">Jaipur</button>
+        <button class="city-chip" data-city="Bangalore">Bangalore</button>
+        <button class="city-chip" data-city="Delhi">Delhi</button>
+        <button class="city-chip" data-city="Hyderabad">Hyderabad</button>
+      </div>
+    </div>
+
+    <div class="slide-location-badge" id="slide-location-badge">
+      <span class="location-dot"></span>
+      <span id="slide-location-text">Luxury Resort · India</span>
+    </div>
+
+    <div class="slide-dots" id="slide-dots"></div>
+
+    <button class="slide-arrow slide-prev" id="slide-prev">&#8249;</button>
+    <button class="slide-arrow slide-next" id="slide-next">&#8250;</button>
+
+    <div class="slide-progress-bar" id="slide-progress"></div>
+  </section>
+
+  <section id="hotels" class="section-hotels reveal">
+    <div class="section-inner">
+      <div class="section-header-row">
+        <div>
+          <p class="section-eyebrow">Featured Collection</p>
+          <h2 class="section-title">Curated Stays</h2>
+          <p class="section-subtitle">Handpicked hotels across India's top destinations</p>
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all">All Stays</button>
+          <button class="filter-tab" data-filter="5">Luxury</button>
+          <button class="filter-tab" data-filter="business">Business</button>
+          <button class="filter-tab" data-filter="4">Essentials</button>
+        </div>
+      </div>
+      <div class="hotels-filter-bar">
+        <div class="filter-search-wrap">
+          <span class="filter-icon">🔍</span>
+          <input type="text" id="hotel-search" placeholder="Search by city or hotel name..." />
+        </div>
+        <div class="filter-price-wrap">
+          <label>Max Price: <span id="price-label">₹10,000</span></label>
+          <input type="range" id="price-range" min="1000" max="10000" value="10000" step="100" />
+        </div>
+        <div class="filter-stars">
+          <button class="star-filter-btn" data-star="3">3★</button>
+          <button class="star-filter-btn" data-star="4">4★</button>
+          <button class="star-filter-btn" data-star="5">5★</button>
+        </div>
+        <select id="hotel-sort">
+          <option value="price">Sort: Price</option>
+          <option value="rating">Sort: Rating</option>
+          <option value="name">Sort: Name</option>
+        </select>
+        <span class="results-count" id="results-count"></span>
+      </div>
+      <div class="active-filters" id="active-filters"></div>
+      <div class="hotels-grid" id="hotels-grid"></div>
+    </div>
+  </section>
+
+  <section class="section-deals reveal">
+    <div class="section-inner">
+      <div class="deals-header">
+        <div>
+          <h2 class="section-title deals-title">Exclusive Deals and Offers</h2>
+          <p class="section-subtitle">Limited time offers you cannot miss</p>
+        </div>
+        <a href="#hotels" class="view-all-link">View All Deals →</a>
+      </div>
+      <div class="deals-grid" id="deals-grid"></div>
+    </div>
+  </section>
+
+  <section class="section-cities reveal">
+    <div class="section-inner">
+      <h2 class="section-title">Explore destinations in India</h2>
+      <p class="section-subtitle">Browse hotels in popular cities</p>
+      <div class="cities-grid" id="cities-grid">
+        <div class="city-tile city-large city-mumbai" data-city="Mumbai">
+          <div class="city-overlay"><h3>Mumbai</h3><p>2 hotels</p></div>
+        </div>
+        <div class="city-tile city-delhi" data-city="Delhi">
+          <div class="city-overlay"><h3>Delhi</h3><p>2 hotels</p></div>
+        </div>
+        <div class="city-tile city-bangalore" data-city="Bangalore">
+          <div class="city-overlay"><h3>Bangalore</h3><p>2 hotels</p></div>
+        </div>
+        <div class="city-tile city-goa" data-city="Goa">
+          <div class="city-overlay"><h3>Goa</h3><p>1 hotel</p></div>
+        </div>
+        <div class="city-tile city-jaipur" data-city="Jaipur">
+          <div class="city-overlay"><h3>Jaipur</h3><p>2 hotels</p></div>
+        </div>
+        <div class="city-tile city-hyderabad" data-city="Hyderabad">
+          <div class="city-overlay"><h3>Hyderabad</h3><p>1 hotel</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-why reveal">
+    <div class="section-inner">
+      <h2 class="section-title text-center">Why choose AtlasStay?</h2>
+      <div class="why-grid">
+        <div class="why-card"><div class="why-icon">🔍</div><h3>Smart Search</h3><p>AI-powered recommendations based on your preferences and travel history.</p></div>
+        <div class="why-card"><div class="why-icon">💰</div><h3>Best Price Guarantee</h3><p>We match or beat any price you find elsewhere, guaranteed.</p></div>
+        <div class="why-card"><div class="why-icon">🛡️</div><h3>Secure and Easy</h3><p>SSL secured payments with instant booking confirmation every time.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-testimonials reveal">
+    <div class="section-inner">
+      <h2 class="section-title text-center">What our travelers say</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card"><div class="stars">⭐⭐⭐⭐⭐</div><p class="testimonial-text">"Booked Goa Beach Resort in 2 minutes. Best travel experience ever!"</p><div class="testimonial-author"><img src="https://picsum.photos/seed/priya/40/40" alt="Priya" /><div><strong>Priya Sharma</strong><span>Mumbai</span></div></div></div>
+        <div class="testimonial-card"><div class="stars">⭐⭐⭐⭐⭐</div><p class="testimonial-text">"The compare feature helped me find the perfect hotel under budget."</p><div class="testimonial-author"><img src="https://picsum.photos/seed/rahul/40/40" alt="Rahul" /><div><strong>Rahul Mehta</strong><span>Delhi</span></div></div></div>
+        <div class="testimonial-card"><div class="stars">⭐⭐⭐⭐⭐</div><p class="testimonial-text">"Clean UI, instant confirmation, zero hassle. I love AtlasStay!"</p><div class="testimonial-author"><img src="https://picsum.photos/seed/ananya/40/40" alt="Ananya" /><div><strong>Ananya Iyer</strong><span>Bangalore</span></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-app reveal">
+    <div class="section-inner">
+      <div class="app-banner">
+        <div class="app-banner-text">
+          <h2>Book on the go. Faster than ever.</h2>
+          <p>Download the AtlasStay app for exclusive mobile-only deals and real-time flight status tracking.</p>
+          <div class="app-buttons">
+            <button class="app-btn">App Store</button>
+            <button class="app-btn">Google Play</button>
+          </div>
+        </div>
+        <div class="phone-mockup">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="phone-hotel-card">
+                <img src="https://picsum.photos/seed/goabeach/200/100" alt="Goa Beach Resort" />
+                <p>Goa Beach Resort</p>
+                <span>₹5,200/night</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="compare" class="section-compare reveal">
+    <div class="section-inner">
+      <p class="section-eyebrow">Side-by-Side Comparison</p>
+      <h2 class="section-title">Compare Hotels</h2>
+      <p class="section-subtitle">Select up to 3 hotels to compare details side by side.</p>
+      <div id="compare-container">
+        <div class="compare-empty" id="compare-empty"><p>Select hotels from the Hotels section to compare them here.</p></div>
+        <div class="compare-table-wrap is-hidden" id="compare-table-wrap">
+          <table class="compare-table" id="compare-table"></table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="booking" class="section-booking reveal">
+    <div class="section-inner">
+      <p class="section-eyebrow">Reserve Your Stay</p>
+      <h2 class="section-title">Booking</h2>
+      <p class="section-subtitle">Complete your reservation with live price calculations.</p>
+      <div class="booking-layout">
+        <div class="booking-form-card">
+          <h3>Booking Form</h3>
+          <div class="form-group"><label>Hotel</label><select id="booking-hotel"></select></div>
+          <div class="form-row">
+            <div class="form-group"><label>Check-in</label><input type="date" id="booking-checkin" /></div>
+            <div class="form-group"><label>Check-out</label><input type="date" id="booking-checkout" /></div>
+          </div>
+          <div class="form-group">
+            <label>Guests</label>
+            <div class="guest-stepper"><button id="guests-minus" type="button">−</button><span id="guests-count">1</span><button id="guests-plus" type="button">+</button></div>
+          </div>
+          <div class="form-group"><label>Special Requests</label><textarea id="special-requests" placeholder="Any requests for your stay..."></textarea></div>
+          <button class="btn-confirm" id="confirm-booking" type="button">Confirm Booking</button>
+        </div>
+        <div class="booking-summary-card">
+          <h3>Price Summary</h3>
+          <div class="summary-hotel-info" id="summary-hotel-info">
+            <img id="summary-hotel-img" src="https://picsum.photos/seed/placeholder/80/80" alt="Hotel" />
+            <div>
+              <div class="summary-hotel-name" id="summary-hotel">Select a hotel</div>
+              <div class="summary-hotel-stars" id="summary-stars"></div>
+            </div>
+          </div>
+          <div class="summary-line"><span>Nights</span><span id="summary-nights">0</span></div>
+          <div class="summary-line"><span>Guests</span><span id="summary-guests">1</span></div>
+          <div class="summary-line"><span>Price per night</span><span id="summary-price-per-night">₹0</span></div>
+          <div class="summary-line"><span>Base amount</span><span id="summary-base">₹0</span></div>
+          <div class="summary-line"><span>GST (12%)</span><span id="summary-gst">₹0</span></div>
+          <div class="summary-divider"></div>
+          <div class="summary-total-line"><span>Total Amount</span><span id="summary-total">₹0</span></div>
+          <p class="summary-note" id="summary-note">Select hotel and dates to calculate price</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map" class="section-map reveal">
+    <div class="section-inner">
+      <p class="section-eyebrow">Explore Locations</p>
+      <h2 class="section-title">Map</h2>
+      <p class="section-subtitle">Explore all hotel locations and fly to selected hotel.</p>
+      <div class="map-layout">
+        <div id="map-container"></div>
+        <div class="map-hotel-list" id="map-hotel-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="history" class="section-history reveal">
+    <div class="section-inner">
+      <p class="section-eyebrow">Your Bookings</p>
+      <h2 class="section-title">Booking History</h2>
+      <p class="section-subtitle">Your saved reservations from localStorage.</p>
+      <div class="history-stats">
+        <div class="stat-card"><div class="stat-number" id="stat-total-bookings">0</div><div class="stat-label">Total Bookings</div></div>
+        <div class="stat-card"><div class="stat-number" id="stat-total-spent">₹0</div><div class="stat-label">Total Spent</div></div>
+        <div class="stat-card"><div class="stat-number" id="stat-avg-booking">₹0</div><div class="stat-label">Avg per Booking</div></div>
+      </div>
+      <div id="history-list"></div>
+    </div>
+  </section>
+
+  <section id="analytics" class="section-analytics reveal">
+    <div class="section-inner">
+      <p class="section-eyebrow">Insights</p>
+      <h2 class="section-title">Stay Analytics</h2>
+      <p class="section-subtitle">Track booking and pricing insights across cities.</p>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>Popularity by City</h3>
+          <div class="chart-wrap"><canvas id="chart-bookings-city"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>Guest Rating Split</h3>
+          <div class="chart-wrap"><canvas id="chart-star-rating"></canvas></div>
+        </div>
+      </div>
+      <div class="chart-card chart-full">
+        <h3>6-Month Price Trends</h3>
+        <div class="chart-wrap chart-wrap-tall"><canvas id="chart-price-trends"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">AtlasStay ✦</div>
+          <p class="footer-tagline">Smart Hotel Booking for Modern Travelers</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col"><h4>Platform</h4><a href="#home">Home</a><a href="#hotels">Hotels</a><a href="#compare">Compare</a><a href="#booking">Booking</a></div>
+          <div class="footer-col"><h4>Explore</h4><a href="#map">Map</a><a href="#history">History</a><a href="#analytics">Analytics</a></div>
+          <div class="footer-col"><h4>Cities</h4><a href="#">Mumbai</a><a href="#">Delhi</a><a href="#">Goa</a><a href="#">Jaipur</a></div>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 AtlasStay. All rights reserved.</p>
+        <p class="footer-credit">Designed and Developed by <span class="footer-dev-name">Karthik Kanagala</span></p>
+        <div class="footer-socials"><a href="#" class="social-pill">GitHub</a><a href="#" class="social-pill">LinkedIn</a><a href="#" class="social-pill">Portfolio</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast-container"></div>
+
+  <div class="modal-overlay is-hidden" id="modal-overlay">
+    <div class="modal-box" id="modal-box"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
